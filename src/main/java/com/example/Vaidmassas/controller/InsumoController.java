@@ -43,3 +43,4 @@ public class InsumoController {
         return ResponseEntity.noContent().build(); // Status 204 (sem conteúdo, mas deu certo)
     }
 }
+a

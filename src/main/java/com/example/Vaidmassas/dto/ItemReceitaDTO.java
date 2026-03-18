@@ -4,3 +4,4 @@ public record ItemReceitaDTO(
         Long insumoId,
         double quantidade
 ) {}
+a

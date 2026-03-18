@@ -23,3 +23,4 @@ public class Produto {
     @JoinColumn(name = "produto_id") // Cria a chave estrangeira na tabela ItemFichaTecnica
     private List<ItemFichaTecnica> itensFicha;
 }
+a
