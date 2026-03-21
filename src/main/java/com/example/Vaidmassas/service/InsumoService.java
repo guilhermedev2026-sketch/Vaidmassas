@@ -14,7 +14,6 @@ public class InsumoService {
     private InsumoRepository repository;
 
     public Insumo salvar(InsumoRequestDTO dto) {
-        // Transformamos o Record (DTO) na nossa Entity (Model)
         Insumo novoInsumo = Insumo.builder()
                 .nome(dto.nome())
                 .quantidadeEmEstoque(dto.quantidadeEmEstoque())
@@ -28,12 +27,10 @@ public class InsumoService {
         return repository.findAll();
     }
 
-    // Para deletar
     public void deletar(Long id) {
         repository.deleteById(id);
     }
 
-    // Para atualizar
     public Insumo atualizar(Long id, InsumoRequestDTO dto) {
         Insumo insumoExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Insumo não encontrado"));
@@ -45,4 +42,3 @@ public class InsumoService {
         return repository.save(insumoExistente);
     }
 }
-a

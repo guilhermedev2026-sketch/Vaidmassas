@@ -15,10 +15,9 @@ public class ItemFichaTecnica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Vários itens de ficha podem referenciar o mesmo Insumo
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "insumo_id")
     private Insumo insumo;
 
     private double quantidadeUtilizada;
 }
-a

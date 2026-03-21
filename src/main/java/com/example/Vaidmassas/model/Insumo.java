@@ -24,4 +24,3 @@ public class Insumo{
         KG, GRAMA, LITRO, UNIDADE, MILILITRO
     }
 }
-a

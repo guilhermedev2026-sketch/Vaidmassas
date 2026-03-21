@@ -13,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/insumos") // URL base para este recurso
+@RequestMapping("/api/insumos")
 public class InsumoController {
 
     @Autowired
@@ -22,7 +22,6 @@ public class InsumoController {
     @PostMapping
     public ResponseEntity<Insumo> criar(@RequestBody @Valid InsumoRequestDTO dados) {
         Insumo novoInsumo = service.salvar(dados);
-        // Retorna Status 201 (Created) e o objeto criado no corpo
         return new ResponseEntity<>(novoInsumo, HttpStatus.CREATED);
     }
 
@@ -40,7 +39,6 @@ public class InsumoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         service.deletar(id);
-        return ResponseEntity.noContent().build(); // Status 204 (sem conteúdo, mas deu certo)
+        return ResponseEntity.noContent().build();
     }
 }
-a

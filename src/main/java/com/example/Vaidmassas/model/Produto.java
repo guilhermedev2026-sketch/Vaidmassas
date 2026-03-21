@@ -20,7 +20,6 @@ public class Produto {
     private double precoVenda;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "produto_id") // Cria a chave estrangeira na tabela ItemFichaTecnica
+    @JoinColumn(name = "produto_id")
     private List<ItemFichaTecnica> itensFicha;
 }
-a

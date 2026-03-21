@@ -5,12 +5,15 @@ import com.example.Vaidmassas.dto.ProdutoRequestDTO;
 import com.example.Vaidmassas.model.Insumo;
 import com.example.Vaidmassas.model.ItemFichaTecnica;
 import com.example.Vaidmassas.model.Produto;
+import com.example.Vaidmassas.model.Venda;
 import com.example.Vaidmassas.repository.InsumoRepository;
 import com.example.Vaidmassas.repository.ProdutoRepository;
+import com.example.Vaidmassas.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +26,11 @@ public class ProdutoService {
     @Autowired
     private InsumoRepository insumoRepository;
 
+    @Autowired
+    private VendaRepository vendaRepository;
+
     @Transactional
     public Produto salvar(ProdutoRequestDTO dto) {
-        // Converte os itens do DTO para a entidade ItemFichaTecnica
         List<ItemFichaTecnica> fichaTecnica = construirFichaTecnica(dto.itens());
 
         Produto novoProduto = Produto.builder()
@@ -51,8 +56,6 @@ public class ProdutoService {
         Produto produto = buscarPorId(id);
         produtoRepository.delete(produto);
     }
-
-    // --- LÓGICA DE VENDA (BAIXA DE ESTOQUE) ---
     @Transactional
     public void realizarVenda(Long produtoId) {
         Produto produto = buscarPorId(produtoId);
@@ -62,17 +65,22 @@ public class ProdutoService {
             double quantidadeNecessaria = item.getQuantidadeUtilizada();
 
             if (insumo.getQuantidadeEmEstoque() < quantidadeNecessaria) {
-                throw new RuntimeException("Estoque insuficiente para " + insumo.getNome() +
-                        ". Necessário: " + quantidadeNecessaria + ", Disponível: " + insumo.getQuantidadeEmEstoque());
+                throw new RuntimeException("Estoque insuficiente para " + insumo.getNome());
             }
 
-            // Atualiza o estoque do insumo
             insumo.setQuantidadeEmEstoque((int) (insumo.getQuantidadeEmEstoque() - quantidadeNecessaria));
             insumoRepository.save(insumo);
         }
+
+        Venda novaVenda = Venda.builder()
+                .nomeProduto(produto.getNome())
+                .valorVenda(produto.getPrecoVenda())
+                .dataHora(LocalDateTime.now())
+                .build();
+
+        vendaRepository.save(novaVenda);
     }
 
-    // --- MÉTODO AUXILIAR PARA CONSTRUIR A FICHA ---
     private List<ItemFichaTecnica> construirFichaTecnica(List<ItemReceitaDTO> itensDto) {
         return itensDto.stream().map(itemDto -> {
             Insumo insumo = insumoRepository.findById(itemDto.insumoId())
@@ -84,5 +92,5 @@ public class ProdutoService {
                     .build();
         }).collect(Collectors.toList());
     }
+
 }
-a
